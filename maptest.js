@@ -7,9 +7,19 @@ $(function() {
     var HOSTNAME = 'EN4102960.local';
     var VIDEOTOPIC = "/camera/rgb/image_color";
     var ALT_VIDEOTOPIC = "/canon_camera";
+
+    var randomString = function(length) {
+        var text = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        for(var i = 0; i < length; i++) {
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+        }
+        return text;
+    }
+
     if (HOSTNAME == "") {
         HOSTNAME = window.location.hostname || "127.0.0.1";
-        $('video.camera')[0].src = "http://" + HOSTNAME + ":9091/stream?topic=" + VIDEOTOPIC + "&width=320&height=240&quality=65&type=vp8";
+        $('video.camera')[0].src = "http://" + HOSTNAME + ":9091/stream?topic=" + VIDEOTOPIC + "&width=320&height=240&quality=65&type=vp8&break_cache=" + randomString(8);
         $('#vid-from')[0].innerHTML = VIDEOTOPIC;
     }
 
