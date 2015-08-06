@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+        <script src="http://cdn.robotwebtools.org/EaselJS/current/easeljs.min.js"></script>
+        <script src="http://cdn.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
+        <script src="http://cdn.robotwebtools.org/roslibjs/current/roslib.js"></script>
+        <script type="text/javascript" src="http://cdn.robotwebtools.org/mjpegcanvasjs/current/mjpegcanvas.min.js"></script>
+        <script src="ros2d.js"></script>
+        <script src="nav2d.js"></script>
+        
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+
+        <script src="maptest.js"></script>
+        <link rel="stylesheet" href="maptest.css">
+    </head>
+
+    <body>
+        <div class="modal fade" id="logModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Debug Output</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="rosout">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-8">
+                    <div id="vid-panel"  class="panel panel-primary">
+                        <div class"panel-body">
+                    <video class="camera" src="http://10.143.21.252:9091/stream?topic=/camera/rgb/image_color&width=320&height=240&quality=65&type=vp8" type="video/webm" autoplay controls></video>
+                        </div>
+                        <div class="panel-footer">
+                            Video feed from <span id="vid-from">Kinect</span>. 
+                            <a id="change_vid" href="#">Change</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 button-wrapper">
+                    <a id="abort" href="#" role="button" class="btn btn-lg btn-danger">ABORT</a>
+                    <a id="pause" href="#" role="button" class="btn btn-lg btn-warning">Pause</a>
+                    <a href="#" role="button" class="btn btn-lg btn-primary">Speak</a>
+                    <a href="#" role="button" data-toggle="modal" data-target="#logModal" class="btn btn-lg btn-info">Log <span id="log_num" class="badge"></span></a>
+                </div>
+                <div class="col-sm-4">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            Status
+                        </div>
+                        <div id="status" class="panel-body">
+                            <h3 id="status-string">Seems Fine</h3>
+                            <b>Battery:</b> 
+                            <meter min="11.5" max="13" low="11.7" id="battery_meter"></meter>
+                            <span id="battery">???</span> V
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div id="current_action"  class="panel panel-primary">
+                        <div class="panel-heading">
+                            Current Action
+                        </div>
+                        <div class="panel-body">
+                            <h3 id="current_action_name">None</h3>
+                            <ul id="current_action_params"></ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div id="current_goal"  class="panel panel-primary">
+                        <div class="panel-heading">
+                            Current Goal
+                        </div>
+                        <div class="panel-body">
+                            <h3 id="current_goal_name">None</h3>
+                            <ul id="current_goal_params"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div id="prompts" class="col-lg-12 bg-success center-block">
+                    Nothing to report
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
