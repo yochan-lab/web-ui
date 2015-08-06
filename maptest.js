@@ -4,7 +4,7 @@
 $(function() {
     // Connect to ROS.
     var HOSTNAME = '';
-    var HOSTNAME = '10.143.21.252';
+    var HOSTNAME = 'EN4102960.local';
     var VIDEOTOPIC = "/camera/rgb/image_color";
     var ALT_VIDEOTOPIC = "/canon_camera";
     if (HOSTNAME == "") {
