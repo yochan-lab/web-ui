@@ -28,7 +28,7 @@ $(function() {
         var tmp = VIDEOTOPIC;
         VIDEOTOPIC = ALT_VIDEOTOPIC;
         ALT_VIDEOTOPIC = tmp;
-        v.src = "http://" + HOSTNAME + ":9091/stream?topic=" + VIDEOTOPIC + "&width=320&height=240&quality=65&type=vp8";
+        v.src = "http://" + HOSTNAME + ":9091/stream?topic=" + VIDEOTOPIC + "&width=320&height=240&quality=65&type=vp8&break_cache=" + randomString(8);
         $('#vid-from')[0].innerHTML = VIDEOTOPIC;
     }
 
