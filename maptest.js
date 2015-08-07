@@ -5,8 +5,10 @@ $(function() {
     // Connect to ROS.
     var HOSTNAME = '';
     var HOSTNAME = 'EN4102960.local';
-    var VIDEOTOPIC = "/camera/rgb/image_color";
-    var ALT_VIDEOTOPIC = "/canon_camera";
+    var match = RegExp('[?&]hostname=([^&]*)').exec(window.location.search);
+    var q_host =  match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+    var ALT_VIDEOTOPIC = "/camera/rgb/image_color";
+    var VIDEOTOPIC = "/canon_camera";
 
     var randomString = function(length) {
         var text = "";
@@ -17,11 +19,10 @@ $(function() {
         return text;
     }
 
-    if (HOSTNAME == "") {
-        HOSTNAME = window.location.hostname || "127.0.0.1";
-        $('video.camera')[0].src = "http://" + HOSTNAME + ":9091/stream?topic=" + VIDEOTOPIC + "&width=320&height=240&quality=65&type=vp8&break_cache=" + randomString(8);
-        $('#vid-from')[0].innerHTML = VIDEOTOPIC;
-    }
+    HOSTNAME = q_host || HOSTNAME || window.location.hostname || "127.0.0.1";
+    console.log('HOSTNAME: '  + HOSTNAME);
+    $('video.camera')[0].src = "http://" + HOSTNAME + ":9091/stream?topic=" + VIDEOTOPIC + "&width=320&height=240&quality=65&type=vp8&break_cache=" + randomString(8);
+    $('#vid-from')[0].innerHTML = VIDEOTOPIC;
 
     function switch_vid() {
         var v = $('video.camera')[0]
@@ -83,21 +84,29 @@ $(function() {
         tts.publish(msg);
    }
 
-
-    function tty(msg) {
-        console.log(msg.data);
-        $('#prompts')[0].innerHTML = msg.data;
-        $('#prompts').removeClass('bg-success').addClass('bg-warning');
+    var default_msg = $("<div class='bg-success'>Nothing to report</div>");
+    $('#prompts').append(default_msg);
+    function tty(msg, bkgd) {
+        bkgd = typeof bkgd !== 'undefined' ? bkgd : 'bg-warning';
+        console.log(msg);
+        var msg_el = $("<div class='" + bkgd + "'>" + msg + '</div>');
+        default_msg.remove()
+        $('#prompts').append(msg_el);
         setTimeout(function () {
-            if ($('#prompts')[0].innerHTML == msg.data) {
-                $('#prompts')[0].innerHTML = "Nothing to report";
-                $('#prompts').removeClass('bg-warning').addClass('bg-success');
+            msg_el.fadeOut().remove();
+            if (!$('#prompts').children().length) {
+                $('#prompts').append(default_msg);
         }}, 5000);
     }
     document.ros.Topic({ros:document.ros,
                         name:"/tosay",
-                        messageType:"std_msgs/String"}).subscribe(tty);
-
+                        messageType:"std_msgs/String"}).subscribe(function(msg){return tty(msg.data);});
+    document.ros.Topic({ros:document.ros,
+                        name:"/heard",
+                        messageType:"std_msgs/String"}).subscribe(
+                            function(msg){return tty(msg.data, 'bg-info');}
+                            );
+    document.tty = tty;
 
     function planner_cmd(s) {
         var cmd = ROSLIB.Topic({ros:document.ros,
