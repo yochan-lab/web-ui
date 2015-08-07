@@ -30,8 +30,14 @@ img.camera {
   padding-top: 10px;
   padding-bottom: 10px;
 }
-#prompts, #prompts div {
+#prompts div {
   font-size: 24pt;
-  padding: 30px;
+  padding: 0 30px;
   text-align: center;
+}
+#prompts div:first-child {
+  padding-top: 30px;
+}
+#prompts div:last-child {
+  padding-bottom: 30px;
 }

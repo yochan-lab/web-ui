@@ -93,10 +93,13 @@ $(function() {
         default_msg.remove()
         $('#prompts').append(msg_el);
         setTimeout(function () {
-            msg_el.fadeOut().remove();
-            if (!$('#prompts').children().length) {
-                $('#prompts').append(default_msg);
-        }}, 5000);
+            msg_el.fadeOut(800, function() {
+                $( this ).remove();
+                if (!$('#prompts').children().length) {
+                    $('#prompts').append(default_msg);
+            	};
+            });
+        }, 5000);
     }
     document.ros.Topic({ros:document.ros,
                         name:"/tosay",
