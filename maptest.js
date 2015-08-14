@@ -76,6 +76,16 @@ $(function() {
     }
     document.ros.Topic({ros:document.ros, name:'/RosAria/battery_voltage'}).subscribe(update_battery);
    
+    function update_lap_battery(data) {
+        var text = data.percentage + "%";
+        if (data.charge_state == 1) {
+            text = text + "+";
+        }
+        $('#lap_battery').text(text);
+        $('#lap_battery_meter').val(data.percentage);
+    }
+    document.ros.Topic({ros:document.ros, name:'/laptop_charge'}).subscribe(update_lap_battery);
+
     function speak(words) {
         var tts = ROSLIB.Topic({ros:document.ros,
                                 name:"/tosay",
@@ -88,7 +98,6 @@ $(function() {
     $('#prompts').append(default_msg);
     function tty(msg, bkgd) {
         bkgd = typeof bkgd !== 'undefined' ? bkgd : 'bg-warning';
-        console.log(msg);
         var msg_el = $("<div class='" + bkgd + "'>" + msg + '</div>');
         default_msg.remove()
         $('#prompts').append(msg_el);
