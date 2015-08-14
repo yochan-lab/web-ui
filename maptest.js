@@ -78,7 +78,7 @@ $(function() {
    
     function speak(words) {
         var tts = ROSLIB.Topic({ros:document.ros,
-                                name:"/tosay",
+                                name:"/said",
                                 messageType:"std_msgs/String"});
         var msg = ROSLIB.Message({data:words});
         tts.publish(msg);
@@ -102,7 +102,7 @@ $(function() {
         }, 5000);
     }
     document.ros.Topic({ros:document.ros,
-                        name:"/tosay",
+                        name:"/said",
                         messageType:"std_msgs/String"}).subscribe(function(msg){return tty(msg.data);});
     document.ros.Topic({ros:document.ros,
                         name:"/heard",
